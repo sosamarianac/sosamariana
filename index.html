@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mariana Sosa — Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Epilogue:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #0f0d0a;
+  --paper: #f9f6f0;
+  --warm: #f0ebe0;
+  --terra: #b85c2a;
+  --terra-dim: #e8c9b8;
+  --sage: #4a7c59;
+  --sage-dim: #c8dccf;
+  --gold: #c9943a;
+  --gold-dim: #f0ddb8;
+  --muted: #7a6e62;
+  --border: #e0d8cc;
+  --white: #fffdf9;
+}
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: 'Epilogue', sans-serif;
+  font-weight: 400;
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* CUSTOM CURSOR */
+.cursor {
+  width: 10px; height: 10px;
+  background: var(--terra);
+  border-radius: 50%;
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%,-50%);
+  transition: transform 0.1s, width 0.2s, height 0.2s, background 0.2s;
+  mix-blend-mode: multiply;
+}
+.cursor-ring {
+  width: 36px; height: 36px;
+  border: 1.5px solid var(--terra);
+  border-radius: 50%;
+  position: fixed;
+  pointer-events: none;
+  z-index: 9998;
+  transform: translate(-50%,-50%);
+  transition: transform 0.18s ease, width 0.3s, height 0.3s;
+  opacity: 0.5;
+}
+body:hover .cursor { opacity: 1; }
+
+@media (hover: none) {
+  body { cursor: auto; }
+  .cursor, .cursor-ring { display: none; }
+}
+
+/* NAV */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 60px;
+  background: rgba(249,246,240,0.85);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.3s;
+}
+nav.scrolled { border-color: var(--border); }
+
+.nav-logo {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  color: var(--ink);
+  text-decoration: none;
+}
+.nav-logo em { color: var(--terra); font-style: italic; }
+
+.nav-right { display: flex; align-items: center; gap: 28px; }
+
+.nav-links { display: flex; gap: 36px; list-style: none; }
+.nav-links a {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--muted);
+  text-decoration: none;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--terra); }
+
+.nav-cta {
+  background: var(--ink);
+  color: var(--paper) !important;
+  padding: 9px 20px;
+  border-radius: 50px;
+  transition: background 0.2s !important;
+}
+.nav-cta:hover { background: var(--terra) !important; color: white !important; }
+
+.lang-toggle {
+  display: flex;
+  gap: 2px;
+  background: var(--warm);
+  border-radius: 50px;
+  padding: 4px;
+}
+.lang-btn {
+  font-family: 'Epilogue', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  padding: 6px 14px;
+  border-radius: 50px;
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.lang-btn.active { background: var(--ink); color: var(--paper); }
+
+/* HERO */
+.hero {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding: 0 60px;
+  align-items: center;
+  gap: 60px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -200px; right: -200px;
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(184,92,42,0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.hero-left { padding-top: 80px; }
+
+.hero-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--terra);
+  margin-bottom: 24px;
+  opacity: 0;
+  animation: fadeUp 0.8s ease 0.2s forwards;
+}
+.hero-tag::before {
+  content: '';
+  width: 32px; height: 1px;
+  background: var(--terra);
+}
+
+.hero-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(48px, 6.5vw, 80px);
+  font-weight: 700;
+  line-height: 1.02;
+  letter-spacing: -2px;
+  margin-bottom: 28px;
+  opacity: 0;
+  animation: fadeUp 0.8s ease 0.35s forwards;
+}
+.hero-name em {
+  font-style: italic;
+  color: var(--terra);
+}
+
+.hero-desc {
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--muted);
+  max-width: 460px;
+  margin-bottom: 40px;
+  font-weight: 300;
+  opacity: 0;
+  animation: fadeUp 0.8s ease 0.5s forwards;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  opacity: 0;
+  animation: fadeUp 0.8s ease 0.65s forwards;
+}
+
+.btn-main {
+  background: var(--terra);
+  color: white;
+  padding: 14px 32px;
+  border-radius: 50px;
+  font-family: 'Epilogue', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 4px 20px rgba(184,92,42,0.3);
+}
+.btn-main:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(184,92,42,0.4); }
+
+.btn-ghost {
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: color 0.2s;
+}
+.btn-ghost:hover { color: var(--terra); }
+
+.hero-right {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-top: 100px;
+  opacity: 0;
+  animation: fadeIn 1s ease 0.7s forwards;
+}
+
+.hero-stat-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 20px 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.hero-stat-card:hover { transform: translateX(-6px); box-shadow: 6px 0 20px rgba(0,0,0,0.06); }
+
+.stat-icon {
+  width: 44px; height: 44px;
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; flex-shrink: 0;
+}
+
+.stat-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 1;
+}
+.stat-lbl { font-size: 12px; color: var(--muted); margin-top: 3px; }
+
+.hero-available {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--sage);
+  font-weight: 500;
+  margin-top: 8px;
+}
+.avail-dot {
+  width: 8px; height: 8px;
+  background: var(--sage);
+  border-radius: 50%;
+  animation: pulse 2s ease infinite;
+}
+@keyframes pulse {
+  0%,100% { box-shadow: 0 0 0 0 rgba(74,124,89,0.4); }
+  50% { box-shadow: 0 0 0 6px rgba(74,124,89,0); }
+}
+
+/* SECTION SHARED */
+section { padding: 100px 60px; }
+
+.section-tag {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  color: var(--terra);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.section-tag::after { content:''; flex:0 0 40px; height:1px; background:var(--terra); }
+
+.section-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(36px, 5vw, 56px);
+  font-weight: 700;
+  letter-spacing: -1.5px;
+  line-height: 1.05;
+  margin-bottom: 16px;
+}
+.section-title em { font-style: italic; color: var(--terra); }
+
+.section-sub {
+  font-size: 15px;
+  color: var(--muted);
+  max-width: 560px;
+  line-height: 1.7;
+  font-weight: 300;
+  margin-bottom: 56px;
+}
+
+.section-head { text-align: center; }
+.section-head .section-tag { justify-content: center; }
+.section-head .section-tag::after { display: none; }
+.section-head .section-tag::before { content:''; flex:0 0 40px; height:1px; background:var(--terra); }
+.section-head .section-sub { margin-left: auto; margin-right: auto; }
+
+/* EXPERIENCE */
+#experience { background: var(--warm); }
+
+.experience-wrap { max-width: 720px; margin: 0 auto; }
+
+.timeline { position: relative; padding-left: 28px; }
+.timeline::before {
+  content:''; position:absolute; left:0; top:8px; bottom:8px;
+  width:1px; background:var(--border);
+}
+
+.timeline-item { position:relative; padding-bottom:40px; }
+.timeline-item:last-child { padding-bottom: 0; }
+.timeline-item::before {
+  content:''; position:absolute; left:-32px; top:7px;
+  width:8px; height:8px; border-radius:50%;
+  background:var(--terra); border:2px solid var(--warm);
+  box-shadow:0 0 0 2px var(--terra);
+}
+
+.tl-date { font-size:11px; color:var(--terra); font-weight:600; text-transform:uppercase; letter-spacing:1px; margin-bottom:6px; }
+.tl-role { font-family:'Cormorant Garamond',serif; font-size:22px; font-weight:700; }
+.tl-company { font-size:13px; color:var(--muted); margin-top:2px; margin-bottom:14px; }
+
+.tl-points { display:flex; flex-direction:column; gap:7px; }
+.tl-point {
+  font-size:13.5px; color:var(--ink); line-height:1.6;
+  padding-left:16px; position:relative; font-weight:300;
+}
+.tl-point::before { content:'—'; position:absolute; left:0; color:var(--terra); }
+
+/* SKILLS */
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 36px;
+}
+
+.skill-group {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 28px 26px;
+}
+.skill-group-name {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--muted);
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+.skill-intro {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.6;
+  font-weight: 300;
+  margin-bottom: 16px;
+}
+
+.skill-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.skill-chip {
+  padding: 7px 16px;
+  border-radius: 50px;
+  font-size: 13px;
+  font-weight: 500;
+  border: 1px solid var(--border);
+  background: var(--paper);
+  transition: all 0.2s;
+}
+.skill-chip:hover { border-color: var(--terra); color: var(--terra); transform: translateY(-1px); }
+.skill-chip.highlight { background: var(--terra-dim); border-color: var(--terra-dim); color: var(--terra); }
+
+/* VENTURE */
+#venture { background: var(--warm); }
+
+.venture-wrap { max-width: 760px; margin: 0 auto; }
+
+.venture-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 44px;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 28px;
+  align-items: center;
+}
+.venture-logo {
+  width: 150px;
+  height: auto;
+  flex-shrink: 0;
+}
+.venture-desc {
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.7;
+  font-weight: 300;
+  margin-bottom: 22px;
+  max-width: 540px;
+}
+.btn-venture {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--ink);
+  color: white;
+  padding: 12px 26px;
+  border-radius: 50px;
+  font-family: 'Epilogue', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 0.2s, transform 0.2s;
+}
+.btn-venture:hover { background: var(--terra); transform: translateY(-2px); }
+
+/* CONTACT */
+#contact { background: var(--ink); color: var(--paper); }
+
+#contact .section-tag { color: var(--terra); }
+#contact .section-tag::after { background: var(--terra); }
+#contact .section-title { color: var(--paper); }
+#contact .section-sub { color: rgba(249,246,240,0.5); }
+
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+}
+
+.contact-links { display: flex; flex-direction: column; gap: 16px; }
+.contact-link {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 18px 20px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.08);
+  text-decoration: none;
+  color: var(--paper);
+  transition: all 0.2s;
+}
+.contact-link:hover { border-color: var(--terra); background: rgba(184,92,42,0.1); }
+.contact-icon {
+  width: 40px; height: 40px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 10px;
+  display:flex; align-items:center; justify-content:center; font-size:18px;
+}
+.contact-label { font-size:11px; color:rgba(249,246,240,0.4); text-transform:uppercase; letter-spacing:1px; }
+.contact-val { font-size:14px; font-weight:500; margin-top:2px; }
+
+.contact-right {
+  padding: 40px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 20px;
+}
+.contact-big {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 48px;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -2px;
+  margin-bottom: 20px;
+}
+.contact-big em { font-style: italic; color: var(--terra); }
+.contact-note {
+  font-size: 14px;
+  color: rgba(249,246,240,0.5);
+  line-height: 1.7;
+  font-weight: 300;
+  margin-bottom: 28px;
+}
+.btn-contact {
+  background: var(--terra);
+  color: white;
+  padding: 14px 32px;
+  border-radius: 50px;
+  font-family: 'Epilogue', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  display: inline-block;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 4px 20px rgba(184,92,42,0.4);
+}
+.btn-contact:hover { transform: translateY(-2px); }
+
+/* FOOTER */
+footer {
+  background: var(--ink);
+  border-top: 1px solid rgba(255,255,255,0.06);
+  padding: 24px 60px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: rgba(249,246,240,0.3);
+  font-size: 12px;
+}
+
+/* ANIMATIONS */
+@keyframes fadeUp {
+  from { opacity:0; transform:translateY(24px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity:0; }
+  to   { opacity:1; }
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(32px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* DIVIDER */
+.divider {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border), transparent);
+}
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  nav { padding: 16px 24px; }
+  .nav-links { display: none; }
+  section { padding: 70px 24px; }
+  .hero { grid-template-columns: 1fr; padding: 110px 24px 60px; min-height: auto; }
+  .hero-right { padding-top: 20px; }
+  .skills-grid { grid-template-columns: 1fr; }
+  .venture-card { grid-template-columns: 1fr; text-align: center; }
+  .venture-logo { margin: 0 auto; width: 120px; }
+  .contact-grid { grid-template-columns: 1fr; gap: 36px; }
+  footer { flex-direction: column; gap: 8px; text-align: center; padding: 20px 24px; }
+}
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursor-ring"></div>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#home" class="nav-logo">Mariana <em>Sosa</em></a>
+  <div class="nav-right">
+    <ul class="nav-links">
+      <li><a href="#home" data-i18n data-es="Inicio" data-en="Home"></a></li>
+      <li><a href="#experience" data-i18n data-es="Experiencia" data-en="Experience"></a></li>
+      <li><a href="#skills" data-i18n data-es="Herramientas" data-en="Tools"></a></li>
+      <li><a href="#venture" data-i18n data-es="Emprendimiento" data-en="Venture"></a></li>
+      <li><a href="#contact" data-i18n data-es="Contacto" data-en="Contact"></a></li>
+      <li><a href="mailto:sosa.marianac@gmail.com" class="nav-cta" data-i18n data-es="Contratame" data-en="Hire me"></a></li>
+    </ul>
+    <div class="lang-toggle">
+      <button class="lang-btn" data-lang="es">ES</button>
+      <button class="lang-btn" data-lang="en">EN</button>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-left">
+    <div class="hero-tag" data-i18n data-es="Disponible para trabajo remoto" data-en="Available for remote work"></div>
+    <h1 class="hero-name" data-i18n-html
+      data-es-html="Procesos claros,<br><em>resultados medibles</em>"
+      data-en-html="Clear processes,<br><em>measurable results</em>"></h1>
+    <p class="hero-desc" data-i18n
+      data-es="Profesional con más de 10 años de experiencia gestionando procesos financieros, proveedores y operaciones internas en gastronomía, logística y empresas corporativas. Construyo estructuras administrativas desde cero, reduzco costos y mejoro la precisión de los reportes — apoyándome cada vez más en herramientas de inteligencia artificial para trabajar con mayor eficiencia."
+      data-en="Administrative and operations professional with 10+ years of experience managing financial processes, vendor relations, and internal workflows across hospitality, logistics, and corporate environments. I build administrative structures from scratch, reduce costs, and improve reporting accuracy — increasingly supported by AI tools that help me work with more speed and precision.">
+    </p>
+    <div class="hero-actions">
+      <a href="#experience" class="btn-main" data-i18n data-es="Ver experiencia" data-en="See experience"></a>
+      <a href="#contact" class="btn-ghost" data-i18n data-es="Contactarme →" data-en="Get in touch →"></a>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="hero-stat-card">
+      <div class="stat-icon" style="background:var(--terra-dim)">📊</div>
+      <div>
+        <div class="stat-num" style="color:var(--terra)">10+</div>
+        <div class="stat-lbl" data-i18n data-es="Años en operaciones y finanzas" data-en="Years in operations & finance"></div>
+      </div>
+    </div>
+    <div class="hero-stat-card">
+      <div class="stat-icon" style="background:var(--sage-dim)">⚙️</div>
+      <div>
+        <div class="stat-num" style="color:var(--sage)">5</div>
+        <div class="stat-lbl" data-i18n data-es="Sistemas ERP dominados" data-en="ERP systems mastered"></div>
+      </div>
+    </div>
+    <div class="hero-stat-card">
+      <div class="stat-icon" style="background:var(--gold-dim)">🌎</div>
+      <div>
+        <div class="stat-num" style="color:var(--gold)">2</div>
+        <div class="stat-lbl" data-i18n data-es="Idiomas · ES y EN" data-en="Languages · ES & EN"></div>
+      </div>
+    </div>
+    <div class="hero-available">
+      <div class="avail-dot"></div>
+      <span data-i18n data-es="Disponible para trabajo remoto · Buenos Aires, AR" data-en="Open to remote opportunities · Buenos Aires, AR"></span>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="section-head reveal">
+    <div class="section-tag" data-i18n data-es="Trayectoria" data-en="Track record"></div>
+    <h2 class="section-title" data-i18n-html
+      data-es-html="Más de 10 años,<br><em>4 industrias</em>"
+      data-en-html="10+ years,<br><em>4 industries</em>"></h2>
+    <p class="section-sub" data-i18n
+      data-es="Desde la gastronomía hasta la logística, construyendo procesos administrativos y financieros sólidos en cada etapa."
+      data-en="From hospitality to logistics, building solid administrative and financial processes at every stage."></p>
+  </div>
+
+  <div class="experience-wrap">
+    <div class="timeline">
+
+      <div class="timeline-item reveal">
+        <div class="tl-date" data-i18n data-es="Feb 2024 – Actualidad" data-en="Feb 2024 – Present"></div>
+        <div class="tl-role" data-i18n data-es="Responsable de Administración y Operaciones" data-en="Administrative & Operations Manager"></div>
+        <div class="tl-company">Enlace Resto · Mendoza, Argentina</div>
+        <div class="tl-points">
+          <div class="tl-point" data-i18n
+            data-es="Diseñé e implementé desde cero la estructura administrativa y financiera del negocio."
+            data-en="Designed and implemented the business's full administrative and financial structure from the ground up."></div>
+          <div class="tl-point" data-i18n
+            data-es="Logré una reducción medible de los gastos operativos mediante control de costos y flujo de caja."
+            data-en="Achieved a measurable reduction in operational expenses through cost control and cash flow tracking."></div>
+        </div>
+      </div>
+
+      <div class="timeline-item reveal" style="transition-delay:0.08s">
+        <div class="tl-date" data-i18n data-es="Nov 2021 – Actualidad" data-en="Nov 2021 – Present"></div>
+        <div class="tl-role" data-i18n data-es="Coordinadora de Operaciones Administrativas" data-en="Administrative Operations Coordinator"></div>
+        <div class="tl-company">PIQ Argentina · Buenos Aires, Argentina</div>
+        <div class="tl-points">
+          <div class="tl-point" data-i18n
+            data-es="Gestioné facturación y conciliación de cuentas de proveedores, reduciendo inconsistencias financieras."
+            data-en="Managed invoicing and vendor account reconciliation, reducing financial discrepancies."></div>
+          <div class="tl-point" data-i18n
+            data-es="Supervisé balances diarios, semanales y mensuales, garantizando exactitud y cumplimiento normativo."
+            data-en="Supervised daily, weekly, and monthly cash balances, ensuring accuracy and regulatory compliance."></div>
+        </div>
+      </div>
+
+      <div class="timeline-item reveal" style="transition-delay:0.16s">
+        <div class="tl-date">Nov 2017 – Nov 2021</div>
+        <div class="tl-role" data-i18n data-es="Administrativa de Logística y Operaciones" data-en="Administrative & Logistics Officer"></div>
+        <div class="tl-company">Cienfuegos S.A. · Argentina</div>
+        <div class="tl-points">
+          <div class="tl-point" data-i18n
+            data-es="Implementé un sistema de documentación digital con acceso remoto."
+            data-en="Implemented a digital documentation system with remote access."></div>
+          <div class="tl-point" data-i18n
+            data-es="Diseñé manuales operativos y plantillas, estandarizando procesos entre sucursales."
+            data-en="Designed operational templates and manuals, standardizing processes across locations."></div>
+        </div>
+      </div>
+
+      <div class="timeline-item reveal" style="transition-delay:0.24s">
+        <div class="tl-date" data-i18n data-es="Ene 2017 – Sep 2017" data-en="Jan 2017 – Sep 2017"></div>
+        <div class="tl-role" data-i18n data-es="Responsable Administrativa y Comercial" data-en="Administrative & Commercial Manager"></div>
+        <div class="tl-company">Simple & CO · Argentina</div>
+        <div class="tl-points">
+          <div class="tl-point" data-i18n
+            data-es="Gestioné conciliaciones bancarias y caja diaria, garantizando precisión financiera."
+            data-en="Managed bank reconciliations and daily cash operations, ensuring financial accuracy."></div>
+          <div class="tl-point" data-i18n
+            data-es="Mejoré el seguimiento de pagos de proveedores y clientes, reduciendo la morosidad."
+            data-en="Improved payment tracking for suppliers and customers, reducing overdue balances."></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="section-head reveal">
+    <div class="section-tag" data-i18n data-es="Capacidades" data-en="Capabilities"></div>
+    <h2 class="section-title" data-i18n-html
+      data-es-html="Organización,<br><em>con criterio</em>"
+      data-en-html="Organized,<br><em>with purpose</em>"></h2>
+    <p class="section-sub" data-i18n
+      data-es="Combino procesos administrativos sólidos con herramientas digitales e inteligencia artificial para trabajar con más precisión y menos tiempo perdido."
+      data-en="I combine solid administrative processes with digital tools and AI to work with more precision and less wasted time."></p>
+  </div>
+
+  <div class="skills-grid">
+    <div class="skill-group reveal">
+      <div class="skill-group-name" data-i18n data-es="Operaciones y Finanzas" data-en="Operations & Finance"></div>
+      <div class="skill-chips">
+        <span class="skill-chip highlight" data-i18n data-es="Control Financiero" data-en="Financial Control"></span>
+        <span class="skill-chip highlight" data-i18n data-es="Optimización de Procesos" data-en="Process Optimization"></span>
+        <span class="skill-chip highlight" data-i18n data-es="Gestión de Proveedores" data-en="Vendor Management"></span>
+        <span class="skill-chip" data-i18n data-es="Reducción de Costos" data-en="Cost Reduction"></span>
+        <span class="skill-chip" data-i18n data-es="Flujo de Caja" data-en="Cash Flow"></span>
+        <span class="skill-chip" data-i18n data-es="Reportes y Análisis" data-en="Reporting & Analysis"></span>
+        <span class="skill-chip" data-i18n data-es="Auditoría Interna" data-en="Internal Audits"></span>
+      </div>
+    </div>
+
+    <div class="skill-group reveal" style="transition-delay:0.08s">
+      <div class="skill-group-name" data-i18n data-es="Sistemas y Herramientas" data-en="Systems & Tools"></div>
+      <div class="skill-chips">
+        <span class="skill-chip highlight" data-i18n data-es="Excel Avanzado" data-en="Advanced Excel"></span>
+        <span class="skill-chip highlight" data-i18n data-es="Sistemas ERP" data-en="ERP Systems"></span>
+        <span class="skill-chip">FUDO</span>
+        <span class="skill-chip">Medicloud</span>
+        <span class="skill-chip">BASCS</span>
+        <span class="skill-chip">Dragonfish</span>
+        <span class="skill-chip">Krimax</span>
+        <span class="skill-chip">Fusion 360</span>
+        <span class="skill-chip">Google Workspace</span>
+        <span class="skill-chip">Word &amp; Outlook</span>
+      </div>
+    </div>
+
+    <div class="skill-group reveal" style="transition-delay:0.16s">
+      <div class="skill-group-name" data-i18n data-es="Inteligencia Artificial" data-en="Artificial Intelligence"></div>
+      <p class="skill-intro" data-i18n
+        data-es="Uso herramientas de IA para acelerar tareas administrativas del día a día:"
+        data-en="I use AI tools to speed up everyday administrative tasks:"></p>
+      <div class="skill-chips">
+        <span class="skill-chip highlight" data-i18n data-es="Redacción de Informes" data-en="Report Writing"></span>
+        <span class="skill-chip highlight" data-i18n data-es="Automatización en Excel" data-en="Excel Automation"></span>
+        <span class="skill-chip highlight" data-i18n data-es="Diseño 3D con IA" data-en="AI-Assisted 3D Design"></span>
+        <span class="skill-chip" data-i18n data-es="Análisis de Datos" data-en="Data Analysis"></span>
+        <span class="skill-chip" data-i18n data-es="Diseño de Procesos" data-en="Process Design"></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- VENTURE -->
+<section id="venture">
+  <div class="section-head reveal">
+    <div class="section-tag" data-i18n data-es="Iniciativa propia" data-en="Side project"></div>
+    <h2 class="section-title" data-i18n-html
+      data-es-html="Más allá de la <em>oficina</em>"
+      data-en-html="Beyond the <em>office</em>"></h2>
+    <p class="section-sub" data-i18n
+      data-es="Además de mi trabajo en operaciones, hace un año empecé a diseñar e imprimir mis propias piezas en 3D."
+      data-en="Alongside my work in operations, a year ago I started designing and 3D printing my own pieces."></p>
+  </div>
+
+  <div class="venture-wrap">
+    <div class="venture-card reveal">
+      <img src="adnlab-logo.png" alt="ADNlab" class="venture-logo">
+      <div>
+        <p class="venture-desc" data-i18n
+          data-es="Diseño piezas desde cero: algunas las genero con ayuda de inteligencia artificial y luego las imprimo, y otras las modelo en Fusion 360 a pedido de clientes. Recién estoy animándome a mostrarlo más en redes."
+          data-en="I design pieces from scratch — some generated with the help of AI and then printed, others modeled in Fusion 360 for client orders. I'm just starting to share it more on social media."></p>
+        <a href="https://www.instagram.com/adnlab_ok/" target="_blank" class="btn-venture" data-i18n data-es="Ver en Instagram →" data-en="View on Instagram →"></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-grid">
+    <div class="reveal">
+      <div class="section-tag" data-i18n data-es="Hablemos" data-en="Let's talk"></div>
+      <div class="contact-links">
+        <a href="mailto:sosa.marianac@gmail.com" class="contact-link">
+          <div class="contact-icon">✉</div>
+          <div>
+            <div class="contact-label">Email</div>
+            <div class="contact-val">sosa.marianac@gmail.com</div>
+          </div>
+        </a>
+        <a href="https://linkedin.com/in/sosamariana" target="_blank" class="contact-link">
+          <div class="contact-icon">in</div>
+          <div>
+            <div class="contact-label">LinkedIn</div>
+            <div class="contact-val">linkedin.com/in/sosamariana</div>
+          </div>
+        </a>
+        <a href="https://wa.me/5491161353349" target="_blank" class="contact-link">
+          <div class="contact-icon">📞</div>
+          <div>
+            <div class="contact-label">WhatsApp</div>
+            <div class="contact-val">+54 9 11 6135-3349</div>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <div class="contact-right reveal" style="transition-delay:0.15s">
+      <div class="contact-big" data-i18n-html
+        data-es-html="Lista para<br><em>empezar.</em>"
+        data-en-html="Ready to<br><em>start now.</em>"></div>
+      <p class="contact-note" data-i18n
+        data-es="Disponible para roles remotos en operaciones, administración o finanzas. Con base en Buenos Aires, trabajando en cualquier zona horaria."
+        data-en="Available for remote roles in operations, administration, or finance. Based in Buenos Aires — working across any timezone."></p>
+      <a href="mailto:sosa.marianac@gmail.com" class="btn-contact" data-i18n data-es="Enviame un mensaje" data-en="Send me a message"></a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span>© 2026 Mariana Sosa</span>
+  <span data-i18n data-es="Buenos Aires, Argentina · Disponible para trabajo remoto" data-en="Buenos Aires, Argentina · Open to remote"></span>
+</footer>
+
+<script>
+// ---------- i18n ----------
+function applyLang(lang) {
+  document.documentElement.lang = lang;
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const val = el.getAttribute('data-' + lang);
+    if (val !== null) el.textContent = val;
+  });
+  document.querySelectorAll('[data-i18n-html]').forEach(el => {
+    const val = el.getAttribute('data-' + lang + '-html');
+    if (val !== null) el.innerHTML = val;
+  });
+  document.querySelectorAll('.lang-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.lang === lang);
+  });
+  try { localStorage.setItem('mariana-portfolio-lang', lang); } catch (e) {}
+}
+
+document.querySelectorAll('.lang-btn').forEach(btn => {
+  btn.addEventListener('click', () => applyLang(btn.dataset.lang));
+});
+
+let initialLang = 'es';
+try { initialLang = localStorage.getItem('mariana-portfolio-lang') || 'es'; } catch (e) {}
+applyLang(initialLang);
+
+// ---------- Custom cursor ----------
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursor-ring');
+let mx = 0, my = 0, rx = 0, ry = 0;
+
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  cursor.style.left = mx + 'px';
+  cursor.style.top = my + 'px';
+});
+
+function animateRing() {
+  rx += (mx - rx) * 0.12;
+  ry += (my - ry) * 0.12;
+  ring.style.left = rx + 'px';
+  ring.style.top = ry + 'px';
+  requestAnimationFrame(animateRing);
+}
+animateRing();
+
+document.querySelectorAll('a, button').forEach(el => {
+  el.addEventListener('mouseenter', () => {
+    cursor.style.width = '18px';
+    cursor.style.height = '18px';
+    ring.style.width = '54px';
+    ring.style.height = '54px';
+  });
+  el.addEventListener('mouseleave', () => {
+    cursor.style.width = '10px';
+    cursor.style.height = '10px';
+    ring.style.width = '36px';
+    ring.style.height = '36px';
+  });
+});
+
+// ---------- Scroll nav ----------
+window.addEventListener('scroll', () => {
+  document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 40);
+});
+
+// ---------- Reveal on scroll ----------
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
